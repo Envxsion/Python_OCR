@@ -2,7 +2,7 @@
 
 <p align="center"><img src="assets\logo.png"></p>
 
-> Py_OCR is a tool which I created for myself, to suit my needs
+> Py_OCR is an OCR tool used to scan documents and pdfs and sort through specified data from the scan.
 
 
 ## Installation
