@@ -1,9 +1,12 @@
+#https://www.youtube.com/watch?v=ZNrteLp_SvY
 import cv2
 import numpy as np
 import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #remember to find executable before ru
-image = cv2.imread('images/ocr-test-1.png')
+#image = cv2.imread('images/ocr-test-1.png')
+#image = cv2.imread('images/test2.png')
+image = cv2.imread('images/Inkedtest1.jpg')
 
 # get grayscale image
 def get_grayscale(image):
