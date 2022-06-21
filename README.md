@@ -21,7 +21,8 @@ python Py_OCR.py
 ```
 
 ## Release History
-
+* 0.0.3
+    * image_to_string working, a bit inaccurate but fixable
 * 0.0.2
     * Image correction working, new requirements
 * 0.0.1

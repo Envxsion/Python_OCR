@@ -55,8 +55,13 @@ def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
 
 def fix_image(image):
-    gray = get_grayscale(image)
-    cv2.imshow('Result', gray)
-    cv2.waitKey(0) #inf loop to see image until closed
+    gray = get_grayscale(image) #any option
+    cv2.imshow('Result', gray) #show result
+    cv2.waitKey(0) #inf loop to see image until closed | WARNING: Close image to see result of postprocessing
+    
+def postprocessing(image):
+    result = pytesseract.image_to_string(image, lang='eng') #convert image to string
+    print(result) #beautify this later with GUI
 
 fix_image(image)
+postprocessing(image)
