@@ -22,7 +22,8 @@ python Py_OCR.py
 
 ## Release History
 
-
+*0.0.2
+    *Image correction working, new requirements
 * 0.0.1
     * Base functionality (Work in progress)
 
