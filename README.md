@@ -21,6 +21,8 @@ python Py_OCR.py
 ```
 
 ## Release History
+* 0.0.5
+    * Word detection is now live :D
 * 0.0.4 
     * Boxes around detected characters with prediction added
 * 0.0.3
