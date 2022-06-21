@@ -1,5 +1,2 @@
-termcolor
-windows-curses
-shutil
-logging
-watchdog
+#add requirements as we go on
+#python install -r requirements.txt  to install everything in req.txt
