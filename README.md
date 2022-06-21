@@ -17,7 +17,7 @@ Py_OCR Only works with python3
 ## Usage example
 
 ```sh
-python Py_OCR.py 
+python main.py
 ```
 
 ## Release History
