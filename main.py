@@ -3,10 +3,10 @@ import cv2
 import numpy as np
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #remember to find executable before ru
-#image = cv2.imread('images/ocr-test-1.png')
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #remember to find executable before run it
+image = cv2.imread('images/ocr-test-1.png')
 #image = cv2.imread('images/test2.png')
-image = cv2.imread('images/Inkedtest1.jpg')
+#image = cv2.imread('images/Inkedtest1.jpg')
 
 # get grayscale image
 def get_grayscale(image):
@@ -88,7 +88,7 @@ def bounding_box_words_only(image):
             if len(box) == 12: #any list with length of 12 is a word
                 x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9])
                 cv2.rectangle(image, (x,y), (d1+x,d2+y), (3, 252, 28), int(1.5)) #bruh they have different xy formats for characters and words :/
-                cv2.putText(image, box[11], (x,y+40), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
+                cv2.putText(image, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image)
     cv2.waitKey(0)
 
