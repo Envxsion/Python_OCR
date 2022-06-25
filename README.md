@@ -17,7 +17,7 @@ Py_OCR Only works with python3
 ## Usage example
 
 ```sh
-python main.py
+python main.py --image images/test-1.png  --gray --denoise
 ```
 
 ## Release History
