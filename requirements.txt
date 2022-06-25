@@ -4,3 +4,4 @@ pyocr
 wand
 pytesseract
 opencv-python
+argparse

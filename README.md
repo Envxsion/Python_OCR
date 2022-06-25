@@ -21,6 +21,8 @@ python main.py
 ```
 
 ## Release History
+* 0.1.0 - Initial closed-release with command-line features
+    * Arguments can now be passed through the command-line to modify and customise the result as needed
 * 0.0.5
     * Word detection is now live :D
 * 0.0.4 

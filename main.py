@@ -2,71 +2,55 @@
 import cv2
 import numpy as np
 import pytesseract
+import argparse
+
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #remember to find executable before run it
-image = cv2.imread('images/ocr-test-1.png')
+#image = cv2.imread('images/ocr-test-1.png')
 #image = cv2.imread('images/test2.png')
 #image = cv2.imread('images/Inkedtest1.jpg')
 
+def command_line():
+    # Create the parser
+    parser = argparse.ArgumentParser()
+    
+    #arguments with help statements
+    parser.add_argument('--image', type=str, help='Path to the image to be scanned', required=True)
+    parser.add_argument('--gray', help='Turn image gray for better detection', action='store_true')
+    parser.add_argument('--denoise', help='Denoise the image for better detection', action='store_true')
+    args = parser.parse_args()
+    image_path = cv2.imread(args.image)
+    if args.denoise and args.gray:
+        imageg = get_grayscale(image_path)
+        imaged = remove_noise(imageg)
+        cv2.imshow('Result', imaged)
+        cv2.waitKey(0)
+        postprocessing(imaged)
+    elif args.gray:
+        imagea = get_grayscale(image_path)
+        cv2.imshow('Result', imagea)
+        cv2.waitKey(0)
+        postprocessing(imagea)
+    elif args.denoise: 
+        imageb = remove_noise(image_path)
+        cv2.imshow('Result', imageb)
+        cv2.waitKey(0)
+        postprocessing(imageb)
+
 # get grayscale image
-def get_grayscale(image):
-    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def get_grayscale(image_path):
+    return cv2.cvtColor(image_path, cv2.COLOR_BGR2GRAY)
 
 # noise removal
-def remove_noise(image):
-    return cv2.medianBlur(image,5)
- 
-#thresholding
-def thresholding(image):
-    return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+def remove_noise(image_path):
+    return cv2.medianBlur(image_path,5)
 
-#dilation
-def dilate(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.dilate(image, kernel, iterations = 1)
-    
-#erosion
-def erode(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.erode(image, kernel, iterations = 1)
 
-#opening - erosion followed by dilation
-def opening(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-
-#canny edge detection
-def canny(image):
-    return cv2.Canny(image, 100, 200)
-
-#skew correction
-def deskew(image):
-    coords = np.column_stack(np.where(image > 0))
-    angle = cv2.minAreaRect(coords)[-1]
-    if angle < -45:
-        angle = -(90 + angle)
-    else:
-        angle = -angle
-    (h, w) = image.shape[:2]
-    center = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return rotated
-
-#template matching
-def match_template(image, template):
-    return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
-
-def fix_image(image):
-    gray = get_grayscale(image) #any option
-    cv2.imshow('Result', gray) #show result
-    cv2.waitKey(0) #inf loop to see image until closed | WARNING: Close image to see result of postprocessing
-
-def postprocessing(image):
-    result = pytesseract.image_to_string(image, lang='eng') #convert image to string
+def postprocessing(image_path):
+    result = pytesseract.image_to_string(image_path, lang='eng') #convert image to string
     print(result) #beautify this later with GUI
 
-def bounding_box_characters_only(image):
+def bounding_box_characters_only(image): #add to cmd
     hImg,wImg,_ = image.shape
     box_coords = pytesseract.image_to_boxes(image) #length, width, diagonal 1, diagonal 2
     #print(box_coords) 
@@ -78,7 +62,7 @@ def bounding_box_characters_only(image):
     cv2.imshow('Result', image)
     cv2.waitKey(0)
 
-def bounding_box_words_only(image): 
+def bounding_box_words_only(image): #add to cmd
     hImg,wImg,_ = image.shape
     box_coords = pytesseract.image_to_data(image) #length, width, diagonal 1, diagonal 2
     #print(box_coords) 
@@ -92,8 +76,9 @@ def bounding_box_words_only(image):
     cv2.imshow('Result', image)
     cv2.waitKey(0)
 
-fix_image(image)
-postprocessing(image)
+
+
+command_line()
 #remember to comment out either the characters or words, as they will overwrite the same image if run together (make a switch statement for this later in GUI stage)
 #bounding_box_characters_only(image)
-bounding_box_words_only(image)
+#bounding_box_words_only(image)
