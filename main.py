@@ -20,7 +20,7 @@ def command_line():
     image_path = cv2.imread(args.image)
     if args.denoise and args.gray and args.at:
         imageG = get_grayscale(image_path)
-        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
+        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #tweak these values of C as per needed
         imageN = cv2.medianBlur(imageT,5)
         cv2.imshow('Result', imageN)
         cv2.waitKey(0)
