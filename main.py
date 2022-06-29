@@ -25,7 +25,7 @@ def command_line():
             post = imageT
             postprocessing(post)
         elif args.at and args.gray == False:
-            print("Error pass in --gray before attempting to use Adaptive thresholding ")
+            print("Error pass in --gray before attempting to use Adaptive Thresholding ")
         elif args.gray:
             imageG = get_grayscale(image_path)
             cv2.imshow('Result', imageG)
@@ -33,32 +33,34 @@ def command_line():
             post = imageG
             postprocessing(post)
         elif args.denoise: 
-            imageb = cv2.medianBlur(image_path,5)
-            cv2.imshow('Result', imageb)
+            imageB = cv2.medianBlur(image_path,5)
+            cv2.imshow('Result', imageB)
             cv2.waitKey(0)
-            post = imageb
+            post = imageB
             postprocessing(post)
         else: 
             postprocessing(image_path)
-        #bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+        if args.box: 
+            bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
     # Create the command line parser
     parser = argparse.ArgumentParser() 
     
     #arguments with help statements (accessed by -h or -help)
-    parser.add_argument('--image', type=str, help='Path to the image to be scanned')
-    parser.add_argument('--gray', help='Turn image gray for better detection', action='store_true')
-    parser.add_argument('--at', help='Adaptive thresholding on grayscale image (requires --gray)', action='store_true')
-    parser.add_argument('--denoise', help='Denoise the image for better detection', action='store_true')
-    parser.add_argument('--pdf', type=str, help='Convert pdf to images')
+    parser.add_argument('-i','--image', type=str, help='Path to the image to be scanned')
+    parser.add_argument('-g','--gray', help='Turn image gray for better detection', action='store_true')
+    parser.add_argument('-at','--adapt', help='Adaptive thresholding on grayscale image (requires --gray)', action='store_true')
+    parser.add_argument('-d','--denoise', help='Denoise the image for better detection', action='store_true')
+    parser.add_argument('-p','--pdf', type=str, help='Convert pdf to images')
+    parser.add_argument('-b','--box', help="Bounding box around words (Doesn't work with any image modifications, trying to fix this)", action='store_true')
     
     args = parser.parse_args()
     if args.pdf:
         pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0/bin') #screw env variables
         i = 1
-        for page in pages:
+        for page in pages: #loop through all pages and magically convert them into jpegs
             image_name = "Page_" + str(i) + ".jpg"  
             page.save(f"frompdf/{image_name}", "JPEG")
-            image_path = cv2.imread(f"frompdf/{image_name}")
+            image_path = cv2.imread(f"frompdf/{image_name}") 
             run(image_path)
             i = i+1
     else:
