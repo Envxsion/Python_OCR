@@ -3,53 +3,70 @@ import cv2
 import numpy as np
 import pytesseract
 import argparse
+from pdf2image import convert_from_path
 
-
-pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #remember to find executable before run it
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
 
 def command_line():
-    # Create the parser
-    parser = argparse.ArgumentParser()
+    def run(image_path):        
+        if args.denoise and args.gray and args.at:
+            imageG = get_grayscale(image_path)
+            imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #tweak these values of C as per needed
+            imageN = cv2.medianBlur(imageT,5)
+            cv2.imshow('Result', imageN)
+            cv2.waitKey(0)
+            post = imageN
+            postprocessing(post)
+        elif args.gray and args.at:
+            imageG = get_grayscale(image_path)
+            imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
+            cv2.imshow('Result', imageT)
+            cv2.waitKey(0)
+            post = imageT
+            postprocessing(post)
+        elif args.at and args.gray == False:
+            print("Error pass in --gray before attempting to use Adaptive thresholding ")
+        elif args.gray:
+            imageG = get_grayscale(image_path)
+            cv2.imshow('Result', imageG)
+            cv2.waitKey(0)
+            post = imageG
+            postprocessing(post)
+        elif args.denoise: 
+            imageb = cv2.medianBlur(image_path,5)
+            cv2.imshow('Result', imageb)
+            cv2.waitKey(0)
+            post = imageb
+            postprocessing(post)
+        else: 
+            postprocessing(image_path)
+        #bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+    # Create the command line parser
+    parser = argparse.ArgumentParser() 
     
-    #arguments with help statements
-    parser.add_argument('--image', type=str, help='Path to the image to be scanned', required=True)
+    #arguments with help statements (accessed by -h or -help)
+    parser.add_argument('--image', type=str, help='Path to the image to be scanned')
     parser.add_argument('--gray', help='Turn image gray for better detection', action='store_true')
     parser.add_argument('--at', help='Adaptive thresholding on grayscale image (requires --gray)', action='store_true')
     parser.add_argument('--denoise', help='Denoise the image for better detection', action='store_true')
+    parser.add_argument('--pdf', type=str, help='Convert pdf to images')
+    
     args = parser.parse_args()
-    image_path = cv2.imread(args.image)
-    if args.denoise and args.gray and args.at:
-        imageG = get_grayscale(image_path)
-        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #tweak these values of C as per needed
-        imageN = cv2.medianBlur(imageT,5)
-        cv2.imshow('Result', imageN)
-        cv2.waitKey(0)
-        post = imageN
-        postprocessing(post)
-    elif args.gray and args.at:
-        imageG = get_grayscale(image_path)
-        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
-        cv2.imshow('Result', imageT)
-        cv2.waitKey(0)
-        post = imageT
-        postprocessing(post)
-    elif args.at and args.gray == False:
-        print("Error pass in --gray before attempting to use Adaptive thresholding ")
-    elif args.gray:
-        imageG = get_grayscale(image_path)
-        cv2.imshow('Result', imageG)
-        cv2.waitKey(0)
-        post = imageG
-        postprocessing(post)
-    elif args.denoise: 
-        imageb = cv2.medianBlur(image_path,5)
-        cv2.imshow('Result', imageb)
-        cv2.waitKey(0)
-        post = imageb
-        postprocessing(post)
-    else: 
-        postprocessing(image_path)
-    #bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+    if args.pdf:
+        pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0/bin') #screw env variables
+        i = 1
+        for page in pages:
+            image_name = "Page_" + str(i) + ".jpg"  
+            page.save(image_name, "JPEG")
+            image_path = cv2.imread(image_name)
+            print(image_path)
+            run(image_path)
+            i = i+1
+    else:
+        image_path = cv2.imread(args.image)
+        run(image_path)
+    
+    
 
 # get grayscale image
 def get_grayscale(image_path):

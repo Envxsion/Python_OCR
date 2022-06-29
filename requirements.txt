@@ -5,3 +5,4 @@ wand
 pytesseract
 opencv-python
 argparse
+pdf2image
