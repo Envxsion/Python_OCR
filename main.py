@@ -57,8 +57,8 @@ def command_line():
         i = 1
         for page in pages:
             image_name = "Page_" + str(i) + ".jpg"  
-            page.save(image_name, "JPEG")
-            image_path = cv2.imread(image_name)
+            page.save(f"frompdf/{image_name}", "JPEG")
+            image_path = cv2.imread(f"frompdf/{image_name}")
             run(image_path)
             i = i+1
     else:
