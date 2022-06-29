@@ -21,7 +21,7 @@ python main.py --image images/test-1.png  --gray --denoise
 ```
 
 ## Release History
-*0.1.6
+* 0.1.6
     * Multipage pdfs can now be converted, converted pdfs are stored in the "frompdf" folder
 * 0.1.5
     * Pdfs can now be converted to images for text recognition (though it is very inaccurate)
