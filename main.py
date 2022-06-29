@@ -73,7 +73,7 @@ def get_grayscale(image_path):
 
 
 def postprocessing(post):
-    result = pytesseract.image_to_string(post, lang='eng') #convert image to string
+    result = pytesseract.image_to_string(post, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, ", lang='eng') #convert image to string
     print(result) #beautify this later with GUI
 
 def bounding_box_characters_only(image): #add to cmd
