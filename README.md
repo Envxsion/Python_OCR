@@ -4,23 +4,24 @@
 
 > Py_OCR is an OCR tool used to scan documents and pdfs and sort through specified data from the scan.
 
-
+---
 ## Installation
-
-
 
 ```sh
 pip install -r requirements.txt
 ```
 Py_OCR Only works with python3
 
-## Usage example
+---
+## Usage examples
 
 ```sh
 python main.py --image images/test-1.png  --gray --denoise
 ```
-
-## Release History
+---
+### Release History/Bug Fixes
+* 0.1.7
+    * Adaptive thresholding command fixed | The config in image_to_text removed, it was causing a buttload of issues with no apparent solutions | Table extraction is work in progress
 * 0.1.6
     * Multipage pdfs can now be converted, converted pdfs are stored in the "frompdf" folder
 * 0.1.5

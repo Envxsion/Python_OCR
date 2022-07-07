@@ -7,9 +7,10 @@ from pdf2image import convert_from_path
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
 
+#--------------------------------------------------------------------------------------------------------------------------------
 def command_line():
     def run(image_path):        
-        if args.denoise and args.gray and args.at:
+        if args.denoise and args.gray and args.adapt:
             imageG = get_grayscale(image_path)
             imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #tweak these values of C as per needed
             imageN = cv2.medianBlur(imageT,5)
@@ -17,14 +18,14 @@ def command_line():
             cv2.waitKey(0)
             post = imageN
             postprocessing(post)
-        elif args.gray and args.at:
+        elif args.gray and args.adapt:
             imageG = get_grayscale(image_path)
             imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
             cv2.imshow('Result', imageT)
             cv2.waitKey(0)
             post = imageT
             postprocessing(post)
-        elif args.at and args.gray == False:
+        elif args.adapt and args.gray == False:
             print("Error pass in --gray before attempting to use Adaptive Thresholding ")
         elif args.gray:
             imageG = get_grayscale(image_path)
@@ -42,9 +43,11 @@ def command_line():
             postprocessing(image_path)
         if args.box: 
             bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+    #--------------------------------------------------------------------------------------------------------------------------------
+    
     # Create the command line parser
     parser = argparse.ArgumentParser() 
-    
+    #--------------------------------------------------------------------------------------------------------------------------------
     #arguments with help statements (accessed by -h or -help)
     parser.add_argument('-i','--image', type=str, help='Path to the image to be scanned')
     parser.add_argument('-g','--gray', help='Turn image gray for better detection', action='store_true')
@@ -52,7 +55,8 @@ def command_line():
     parser.add_argument('-d','--denoise', help='Denoise the image for better detection', action='store_true')
     parser.add_argument('-p','--pdf', type=str, help='Convert pdf to images')
     parser.add_argument('-b','--box', help="Bounding box around words (Doesn't work with any image modifications, trying to fix this)", action='store_true')
-    
+    parser.add_argument('-tb','--extractable', help="Extract table(s) from image", action='store_true')
+    #--------------------------------------------------------------------------------------------------------------------------------
     args = parser.parse_args()
     if args.pdf:
         pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0/bin') #screw env variables
@@ -66,18 +70,20 @@ def command_line():
     else:
         image_path = cv2.imread(args.image)
         run(image_path)
+    #--------------------------------------------------------------------------------------------------------------------------------
     
     
-
+#--------------------------------------------------------------------------------------------------------------------------------
 # get grayscale image
 def get_grayscale(image_path):
     return cv2.cvtColor(image_path, cv2.COLOR_BGR2GRAY)
-
+#--------------------------------------------------------------------------------------------------------------------------------
 
 def postprocessing(post):
-    result = pytesseract.image_to_string(post, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, ", lang='eng') #convert image to string
+    result = pytesseract.image_to_string(post, lang='eng') #convert image to string
+    #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
     print(result) #beautify this later with GUI
-
+#--------------------------------------------------------------------------------------------------------------------------------
 def bounding_box_characters_only(image): #add to cmd
     hImg,wImg,_ = image.shape
     box_coords = pytesseract.image_to_boxes(image) #length, width, diagonal 1, diagonal 2
@@ -89,7 +95,7 @@ def bounding_box_characters_only(image): #add to cmd
         cv2.putText(image, box[0], (x,hImg-y+12), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image)
     cv2.waitKey(0)
-
+#--------------------------------------------------------------------------------------------------------------------------------
 def bounding_box_words_only(image_path): #add to cmd
     hImg,wImg,_ = image_path.shape
     box_coords = pytesseract.image_to_data(image_path) #length, width, diagonal 1, diagonal 2
@@ -103,7 +109,6 @@ def bounding_box_words_only(image_path): #add to cmd
                 cv2.putText(image_path, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image_path)
     cv2.waitKey(0)
-
-
+#--------------------------------------------------------------------------------------------------------------------------------
 command_line()
-#bounding_box_characters_only(image)
+#--------------------------------------------------------------------------------------------------------------------------------
