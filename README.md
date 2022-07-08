@@ -20,6 +20,8 @@ python main.py --image images/test-1.png  --gray --denoise
 ```
 ---
 ### Release History/Bug Fixes
+* 0.1.8
+    * Optimized the source code (about twice as fast)
 * 0.1.7
     * Adaptive thresholding command fixed | The config in image_to_text removed, it was causing a buttload of issues with no apparent solutions | Table extraction is work in progress
 * 0.1.6
