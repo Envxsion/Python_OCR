@@ -47,6 +47,7 @@ def get_grayscale(image_path):
     return cv2.cvtColor(image_path, cv2.COLOR_BGR2GRAY)
 #--------------------------------------------------------------------------------------------------------------------------------
 def postprocessing(post):
+    conf = r'--oem 3 --psm 2'
     result = pytesseract.image_to_string(post, lang='eng') #convert image to string
     #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
     print("\n" "RESULT ---------------------------------------------------------- \n"+ result + "\n-----------------------------------------------------------------") #beautify this later with GUI
