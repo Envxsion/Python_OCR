@@ -16,7 +16,7 @@ Py_OCR Only works with python3
 ## Usage examples
 
 ```sh
-python main.py --image images/test-1.png  --gray --denoise
+python main.py --pdf PDF_Examples/testpdf2.pdf --denoise --gray --adapt
 ```
 ---
 ### Release History/Bug Fixes
