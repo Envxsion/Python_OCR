@@ -15,29 +15,25 @@ def run(image_path):
         imageN = cv2.medianBlur(imageT,5)
         cv2.imshow('Result', imageN)
         cv2.waitKey(0)
-        post = imageN
-        postprocessing(post)
+        postprocessing(post = imageN)
     elif args.gray and args.adapt:
         imageG = get_grayscale(image_path)
         imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
         cv2.imshow('Result', imageT)
         cv2.waitKey(0)
-        post = imageT
-        postprocessing(post)
+        postprocessing(post = imageT)
     elif args.adapt and args.gray == False:
         print("Error pass in --gray before attempting to use Adaptive Thresholding ")
     elif args.gray:
         imageG = get_grayscale(image_path)
         cv2.imshow('Result', imageG)
         cv2.waitKey(0)
-        post = imageG
-        postprocessing(post)
+        postprocessing(post = imageG)
     elif args.denoise: 
         imageB = cv2.medianBlur(image_path,5)
         cv2.imshow('Result', imageB)
         cv2.waitKey(0)
-        post = imageB
-        postprocessing(post)
+        postprocessing(post = imageB)
     else: 
         postprocessing(image_path)
     if args.box: 
