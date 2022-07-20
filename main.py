@@ -11,14 +11,14 @@ pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesse
 def run(image_path):        
     if args.denoise and args.gray and args.adapt:
         imageG = get_grayscale(image_path)
-        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #tweak these values of C as per needed
+        imageT = get_adaptive_threshold(imageG)
         imageN = cv2.medianBlur(imageT,5)
         cv2.imshow('Result', imageN)
         cv2.waitKey(0)
         postprocessing(post = imageN)
     elif args.gray and args.adapt:
         imageG = get_grayscale(image_path)
-        imageT = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11)
+        imageT = get_adaptive_threshold(imageG)
         cv2.imshow('Result', imageT)
         cv2.waitKey(0)
         postprocessing(post = imageT)
@@ -38,6 +38,13 @@ def run(image_path):
         postprocessing(image_path)
     if args.box: 
         bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+#--------------------------------------------------------------------------------------------------------------------------------        
+def get_adaptive_threshold(imageG):
+    blurred = cv2.GaussianBlur(imageG, (7, 7), 0) #slightly blur image
+    threshO = cv2.adaptiveThreshold(imageG, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 11) #original thresholding values
+    threshM = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 10) #adaptive thresholding using mean
+    threshG = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 21, 4) #gaussian thresholding 
+    return threshO
 #--------------------------------------------------------------------------------------------------------------------------------
 def get_grayscale(image_path):
     return cv2.cvtColor(image_path, cv2.COLOR_BGR2GRAY)
