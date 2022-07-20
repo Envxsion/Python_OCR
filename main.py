@@ -15,29 +15,29 @@ def run(image_path):
         imageN = cv2.medianBlur(imageT,5)
         cv2.imshow('Result', imageN)
         cv2.waitKey(0)
-        postprocessing(post = imageN)
+        postprocessing(post = imageN, psm = args.psm, oem = args.oem)
     elif args.gray and args.adapt:
         imageG = get_grayscale(image_path)
         imageT = get_adaptive_threshold(imageG)
         cv2.imshow('Result', imageT)
         cv2.waitKey(0)
-        postprocessing(post = imageT)
+        postprocessing(post = imageT, psm = args.psm, oem = args.oem)
     elif args.adapt and args.gray == False:
         print("Error pass in --gray before attempting to use Adaptive Thresholding ")
     elif args.gray:
         imageG = get_grayscale(image_path)
         cv2.imshow('Result', imageG)
         cv2.waitKey(0)
-        postprocessing(post = imageG)
+        postprocessing(post = imageG, psm = args.psm, oem = args.oem)
     elif args.denoise: 
         imageB = cv2.medianBlur(image_path,5)
         cv2.imshow('Result', imageB)
         cv2.waitKey(0)
-        postprocessing(post = imageB)
+        postprocessing(post = imageB, psm = args.psm, oem = args.oem)
     else: 
-        postprocessing(image_path)
+        postprocessing(image_path, psm = args.psm, oem = args.oem)
     if args.box: 
-        bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
+        bounding_box_words_only(image_path, psm = args.psm, oem = args.oem) #can't add gray/thresholded image, boxing needs 3 values
 #--------------------------------------------------------------------------------------------------------------------------------        
 def get_adaptive_threshold(imageG):
     blurred = cv2.GaussianBlur(imageG, (7, 7), 0) #slightly blur image
@@ -49,8 +49,10 @@ def get_adaptive_threshold(imageG):
 def get_grayscale(image_path):
     return cv2.cvtColor(image_path, cv2.COLOR_BGR2GRAY)
 #--------------------------------------------------------------------------------------------------------------------------------
-def postprocessing(post):
-    conf = r'--oem 3 --psm 2'  #Legacy + LSTM engines with Automatic page segmentation with OSD.
+def postprocessing(post, psm, oem):
+    conf = fr'--oem {oem} --psm {psm}'  #Legacy + LSTM engines with Automatic page segmentation with OSD.
+    #start with psm 3 as a baseline
+    #psm 13 is last resort where is randomly starts detecting everything
     result = pytesseract.image_to_string(post, lang='eng') #convert image to string
     #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
     print("\n" "RESULT ---------------------------------------------------------- \n"+ result + "\n-----------------------------------------------------------------") #beautify this later with GUI
@@ -92,6 +94,8 @@ parser.add_argument('-d','--denoise', help='Denoise the image for better detecti
 parser.add_argument('-p','--pdf', type=str, help='Convert pdf to images')
 parser.add_argument('-b','--box', help="Bounding box around words (Doesn't work with any image modifications, trying to fix this)", action='store_true')
 parser.add_argument('-tb','--extractable', help="Extract table(s) from image", action='store_true')
+parser.add_argument('-psm','--psm', type=int, help="Page segmentation mode (0-7)")
+parser.add_argument('-oem','--oem', type=int, help="Optical character recognition mode (0-4)")
 #--------------------------------------------------------------------------------------------------------------------------------
 args = parser.parse_args()
 if args.pdf:
