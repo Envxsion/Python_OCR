@@ -93,7 +93,6 @@ parser.add_argument('-at','--adapt', help='Adaptive thresholding on grayscale im
 parser.add_argument('-d','--denoise', help='Denoise the image for better detection', action='store_true')
 parser.add_argument('-p','--pdf', type=str, help='Convert pdf to images')
 parser.add_argument('-b','--box', help="Bounding box around words (Doesn't work with any image modifications, trying to fix this)", action='store_true')
-parser.add_argument('-tb','--extractable', help="Extract table(s) from image", action='store_true')
 parser.add_argument('-psm','--psm', type=int, help="Page segmentation mode (0-7)")
 parser.add_argument('-oem','--oem', type=int, help="Optical character recognition mode (0-4)")
 #--------------------------------------------------------------------------------------------------------------------------------
