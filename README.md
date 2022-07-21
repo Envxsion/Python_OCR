@@ -20,6 +20,8 @@ python main.py --pdf PDF_Examples/testpdf2.pdf --denoise --gray --adapt
 ```
 ---
 ### Release History/Bug Fixes
+* 0.1.9
+    * Significant improvement in text detection by using https://tesseract-ocr.github.io/tessdoc/Data-Files tessdata-best instead of the default testdata training model along with custom oem, psm and adaptive thresholding options. **tessdata-best will _need_ to be manually installed in your local TESSERACT_OCR folder (and renamed to "tessdata") in Program Files until we implement a better solution**
 * 0.1.8
     * Optimized the source code (about twice as fast)
 * 0.1.7

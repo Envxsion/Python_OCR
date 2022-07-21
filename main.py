@@ -37,7 +37,7 @@ def run(image_path):
     else: 
         postprocessing(image_path, psm = args.psm, oem = args.oem)
     if args.box: 
-        bounding_box_words_only(image_path, psm = args.psm, oem = args.oem) #can't add gray/thresholded image, boxing needs 3 values
+        bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
 #--------------------------------------------------------------------------------------------------------------------------------        
 def get_adaptive_threshold(imageG):
     blurred = cv2.GaussianBlur(imageG, (7, 7), 0) #slightly blur image
