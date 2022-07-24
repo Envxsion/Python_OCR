@@ -8,9 +8,7 @@
 
 ## Installation
 
-```sh
-pip install -r requirements.txt
-```
+<https://0x00sec.gitbook.io/py_ocr-documentation/installation/py_ocr-installaion>
 
 Py_OCR Only works with python3
 
