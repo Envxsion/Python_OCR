@@ -24,6 +24,16 @@ python main.py --pdf PDF_Examples/testpdf2.pdf --denoise --gray --adapt
 
 ---
 
+---
+
+# Best Results so far
+
+```sh
+python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-2022.pdf"  -b --psm 11
+```
+
+---
+
 ### Release History/Bug Fixes
 
 * 0.1.9
