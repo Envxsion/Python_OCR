@@ -77,7 +77,7 @@ def bounding_box_words_only(image_path): #add to cmd
         if x!= 0:
             box = box.split()
             if len(box) == 12: #any list with length of 12 is a word
-                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9])
+                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9]) #x,y are top left coords, d1 and d2 are height and width
                 cv2.rectangle(image_path, (x,y), (d1+x,d2+y), (3, 252, 28), int(1.5)) #bruh they have different xy formats for characters and words :/
                 cv2.putText(image_path, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image_path)
