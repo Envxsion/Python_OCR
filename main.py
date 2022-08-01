@@ -1,8 +1,9 @@
 #https://www.youtube.com/watch?v=ZNrteLp_SvY
 import cv2
-import numpy as np
-import pytesseract
+#import easyocr
 import argparse
+import pytesseract
+import numpy as np
 from pdf2image import convert_from_path
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
@@ -53,9 +54,12 @@ def postprocessing(post, psm, oem):
     conf = fr'--oem {oem} --psm {psm}'  #Legacy + LSTM engines with Automatic page segmentation with OSD.
     #start with psm 3 as a baseline
     #psm 13 is last resort where is randomly starts detecting everything
-    result = pytesseract.image_to_string(post, lang='eng') #convert image to string
+    #reader = easyocr.Reader(['en', 'en'])
+    resultess = pytesseract.image_to_string(post, lang='eng') #tessereact
+    #resultez=reader.readtext(post, detail = 0, paragraph=True) #easyocr
     #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
-    print("\n" "RESULT ---------------------------------------------------------- \n"+ result + "\n-----------------------------------------------------------------") #beautify this later with GUI
+    print("\n" "RESULT ---------------------------------------------------------- \n"+ resultess + "\n-----------------------------------------------------------------") #beautify this later with GUI
+    #print("\n" "RESULT ---------------------------------------------------------- \n"+ resultez + "\n-----------------------------------------------------------------")
 #--------------------------------------------------------------------------------------------------------------------------------
 def bounding_box_characters_only(image): #add to cmd
     hImg,wImg,_ = image.shape
@@ -77,7 +81,7 @@ def bounding_box_words_only(image_path): #add to cmd
         if x!= 0:
             box = box.split()
             if len(box) == 12: #any list with length of 12 is a word
-                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9])
+                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9]) #x,y are top left coords, d1 and d2 are height and width
                 cv2.rectangle(image_path, (x,y), (d1+x,d2+y), (3, 252, 28), int(1.5)) #bruh they have different xy formats for characters and words :/
                 cv2.putText(image_path, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image_path)
@@ -110,3 +114,8 @@ else:
     image_path = cv2.imread(args.image)
     run(image_path)
 #--------------------------------------------------------------------------------------------------------------------------------
+#useful debugging commands while working with easyocr
+#pip uninstall opencv-python-headless -y
+#pip install opencv-python --upgrade
+#pip uninstall opencv-contrib-python
+#pip install opencv-contrib-python
