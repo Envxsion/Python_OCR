@@ -1,43 +1,43 @@
 #https://www.youtube.com/watch?v=ZNrteLp_SvY
 import cv2
-#import easyocr
-import argparse
-import pytesseract
 import numpy as np
+import pytesseract
+import argparse
 from pdf2image import convert_from_path
+#import reubensgui
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
 
 #--------------------------------------------------------------------------------------------------------------------------------
 def run(image_path):        
-    if args.denoise and args.gray and args.adapt:
+    if denoise and gray and adapt:
         imageG = get_grayscale(image_path)
         imageT = get_adaptive_threshold(imageG)
         imageN = cv2.medianBlur(imageT,5)
         cv2.imshow('Result', imageN)
         cv2.waitKey(0)
-        postprocessing(post = imageN, psm = args.psm, oem = args.oem)
-    elif args.gray and args.adapt:
+        postprocessing(post = imageN, psm = psm, oem = oem)
+    elif gray and adapt:
         imageG = get_grayscale(image_path)
         imageT = get_adaptive_threshold(imageG)
         cv2.imshow('Result', imageT)
         cv2.waitKey(0)
-        postprocessing(post = imageT, psm = args.psm, oem = args.oem)
-    elif args.adapt and args.gray == False:
+        postprocessing(post = imageT, psm = psm, oem = oem)
+    elif adapt and gray == False:
         print("Error pass in --gray before attempting to use Adaptive Thresholding ")
-    elif args.gray:
+    elif gray:
         imageG = get_grayscale(image_path)
         cv2.imshow('Result', imageG)
         cv2.waitKey(0)
-        postprocessing(post = imageG, psm = args.psm, oem = args.oem)
-    elif args.denoise: 
+        postprocessing(post = imageG, psm = psm, oem = oem)
+    elif denoise: 
         imageB = cv2.medianBlur(image_path,5)
         cv2.imshow('Result', imageB)
         cv2.waitKey(0)
-        postprocessing(post = imageB, psm = args.psm, oem = args.oem)
+        postprocessing(post = imageB, psm = psm, oem = oem)
     else: 
-        postprocessing(image_path, psm = args.psm, oem = args.oem)
-    if args.box: 
+        postprocessing(image_path, psm = psm, oem = oem)
+    if box: 
         bounding_box_words_only(image_path) #can't add gray/thresholded image, boxing needs 3 values
 #--------------------------------------------------------------------------------------------------------------------------------        
 def get_adaptive_threshold(imageG):
@@ -54,12 +54,9 @@ def postprocessing(post, psm, oem):
     conf = fr'--oem {oem} --psm {psm}'  #Legacy + LSTM engines with Automatic page segmentation with OSD.
     #start with psm 3 as a baseline
     #psm 13 is last resort where is randomly starts detecting everything
-    #reader = easyocr.Reader(['en', 'en'])
-    resultess = pytesseract.image_to_string(post, lang='eng') #tessereact
-    #resultez=reader.readtext(post, detail = 0, paragraph=True) #easyocr
+    result = pytesseract.image_to_string(post, lang='eng') #convert image to string
     #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
-    print("\n" "RESULT ---------------------------------------------------------- \n"+ resultess + "\n-----------------------------------------------------------------") #beautify this later with GUI
-    #print("\n" "RESULT ---------------------------------------------------------- \n"+ resultez + "\n-----------------------------------------------------------------")
+    print("\n" "RESULT ---------------------------------------------------------- \n"+ result + "\n-----------------------------------------------------------------") #beautify this later with GUI
 #--------------------------------------------------------------------------------------------------------------------------------
 def bounding_box_characters_only(image): #add to cmd
     hImg,wImg,_ = image.shape
@@ -81,28 +78,23 @@ def bounding_box_words_only(image_path): #add to cmd
         if x!= 0:
             box = box.split()
             if len(box) == 12: #any list with length of 12 is a word
-                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9]) #x,y are top left coords, d1 and d2 are height and width
+                x,y,d1,d2 = int(box[6]),int(box[7]),int(box[8]),int(box[9])
                 cv2.rectangle(image_path, (x,y), (d1+x,d2+y), (3, 252, 28), int(1.5)) #bruh they have different xy formats for characters and words :/
                 cv2.putText(image_path, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image_path)
     cv2.waitKey(0)
 #--------------------------------------------------------------------------------------------------------------------------------
-# Create the command line parser
-parser = argparse.ArgumentParser(description='This program may have to be run multiple times with different arguments to get the desired output') 
+image_input_path = ""
+gray = False
+adapt = False
+denoise = False
+pdf = "images\PDF_Examples\Gordon House [M3202]-Service-07-06-2022.pdf"
+box = False
+psm = 3
+oem = 1
 #--------------------------------------------------------------------------------------------------------------------------------
-#arguments with help statements (accessed by -h or -help)
-parser.add_argument('-i','--image', type=str, help='Path to the image to be scanned')
-parser.add_argument('-g','--gray', help='Turn image gray for better detection', action='store_true')
-parser.add_argument('-at','--adapt', help='Adaptive thresholding on grayscale image (requires --gray)', action='store_true')
-parser.add_argument('-d','--denoise', help='Denoise the image for better detection', action='store_true')
-parser.add_argument('-p','--pdf', type=str, help='Convert pdf to images')
-parser.add_argument('-b','--box', help="Bounding box around words (Doesn't work with any image modifications, trying to fix this)", action='store_true')
-parser.add_argument('-psm','--psm', type=int, help="Page segmentation mode (0-7)")
-parser.add_argument('-oem','--oem', type=int, help="Optical character recognition mode (0-4)")
-#--------------------------------------------------------------------------------------------------------------------------------
-args = parser.parse_args()
-if args.pdf:
-    pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0_x86/poppler-0.68.0/bin') #screw env variables
+if image_input_path.endswith('.pdf'):
+    pages = convert_from_path(pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0_x86/poppler-0.68.0/bin') #screw env variables
     i = 1
     for page in pages: #loop through all pages and magically convert them into jpegs
         image_name = "Page_" + str(i) + ".jpg"  
@@ -111,11 +103,6 @@ if args.pdf:
         run(image_path)
         i = i+1
 else:
-    image_path = cv2.imread(args.image)
+    image_path = cv2.imread(image_input_path)
     run(image_path)
 #--------------------------------------------------------------------------------------------------------------------------------
-#useful debugging commands while working with easyocr
-#pip uninstall opencv-python-headless -y
-#pip install opencv-python --upgrade
-#pip uninstall opencv-contrib-python
-#pip install opencv-contrib-python
