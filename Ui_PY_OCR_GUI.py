@@ -71,3 +71,14 @@ class Ui_PY_OCR(object):
         self.label_4.setText(_translate("PY_OCR", "Output Image "))
         self.label_5.setText(_translate("PY_OCR", "Output Text "))
         self.pushButton_4.setText(_translate("PY_OCR", "Save to TXT"))
+
+
+if __name__ == "__main__":
+        import sys
+        app = QtWidgets.QApplication(sys.argv)
+        MainWindow = QtWidgets.QMainWindow()
+        ui = Ui_PY_OCR()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
+        sys.exit(app.exec_())
+        
