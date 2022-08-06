@@ -33,6 +33,8 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 ---
 
 ### Release History/Bug Fixes
+* 0.2.5
+  * Linking the UI to maingui in progress, the buttons work but the displays don't for now. Work in Progess.
 * 0.2.1
   * main.gui file has been created to handle all the logic of the GUI file
 * 0.2.0

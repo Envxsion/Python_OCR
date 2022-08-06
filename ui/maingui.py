@@ -9,7 +9,7 @@ from pdf2image import convert_from_path
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
 
 #--------------------------------------------------------------------------------------------------------------------------------
-def run(image_path):        
+def run(image_path,gray, adapt, denoise, box, oem, psm):        
     if denoise and gray and adapt:
         imageG = get_grayscale(image_path)
         imageT = get_adaptive_threshold(imageG)
@@ -84,25 +84,27 @@ def bounding_box_words_only(image_path): #add to cmd
     cv2.imshow('Result', image_path)
     cv2.waitKey(0)
 #--------------------------------------------------------------------------------------------------------------------------------
-image_input_path = ""
-gray = False
-adapt = False
-denoise = False
-pdf = "images\PDF_Examples\Gordon House [M3202]-Service-07-06-2022.pdf"
-box = False
-psm = 3
-oem = 1
-#--------------------------------------------------------------------------------------------------------------------------------
-if image_input_path.endswith('.pdf'):
-    pages = convert_from_path(pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0_x86/poppler-0.68.0/bin') #screw env variables
-    i = 1
-    for page in pages: #loop through all pages and magically convert them into jpegs
-        image_name = "Page_" + str(i) + ".jpg"  
-        page.save(f"frompdf/{image_name}", "JPEG")
-        image_path = cv2.imread(f"frompdf/{image_name}") 
-        run(image_path)
-        i = i+1
-else:
-    image_path = cv2.imread(image_input_path)
-    run(image_path)
+def default_settings(fname):
+    image_input_path = str(fname[0])
+    gray = False
+    adapt = False
+    denoise = False
+    box = True
+    psm = 3
+    oem = 1
+    filecheck(image_input_path, gray, adapt, denoise, box, oem, psm)
+    
+def filecheck(image_input_path,gray, adapt, denoise, box, oem, psm):   
+    if image_input_path.endswith('.pdf'):
+        pages = convert_from_path(image_input_path, 350, poppler_path=r'C:/Program Files/poppler-0.68.0/bin') #screw env variables
+        i = 1
+        for page in pages: #loop through all pages and magically convert them into jpegs
+            image_name = "Page_" + str(i) + ".jpg"  
+            page.save(f"frompdf/{image_name}", "JPEG")
+            image_path = cv2.imread(f"frompdf/{image_name}") 
+            run(image_path,gray, adapt, denoise, box, oem, psm)
+            i = i+1
+    else:
+        image_path = cv2.imread(image_input_path)
+        run(image_path,gray, adapt, denoise, box, oem, psm)
 #--------------------------------------------------------------------------------------------------------------------------------

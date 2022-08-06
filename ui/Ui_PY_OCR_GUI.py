@@ -9,6 +9,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
+from PyQt5.uic import loadUi
+import importlib
 
 
 class Ui_PY_OCR(object):
@@ -19,41 +22,47 @@ class Ui_PY_OCR(object):
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 30, 391, 241))
-        self.label.setStyleSheet("background-color: rgb(212, 212, 212);\n"
-"border-color: rgb(100, 0, 0);\n"
-"alternate-background-color: rgb(247, 247, 247);")
+        self.label.setStyleSheet("background-color: rgb(212, 212, 212);\n""border-color: rgb(100, 0, 0);\n""alternate-background-color: rgb(247, 247, 247);")
         self.label.setText("")
         self.label.setObjectName("label")
+        
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(30, 280, 181, 41))
-        self.pushButton.setStyleSheet("background-color: rgb(254, 47, 0);\n"
-"font: 12pt \"MS Shell Dlg 2\";")
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(300, 280, 121, 31))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(200, 10, 101, 16))
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(190, 340, 101, 16))
-        self.label_4.setObjectName("label_4")
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(590, 10, 101, 16))
-        self.label_5.setObjectName("label_5")
+        self.pushButton.setStyleSheet("background-color: rgb(254, 47, 0);\n""font: 12pt \"MS Shell Dlg 2\";")
+        self.pushButton.setObjectName("pushButton")        
+        self.pushButton.clicked.connect(self.extract)    
+            
+        
+        self.browse = QtWidgets.QPushButton(self.centralwidget)
+        self.browse.setGeometry(QtCore.QRect(300, 280, 121, 31))
+        self.browse.setObjectName("browse")
+        self.browse.clicked.connect(self.browsefiles) #function name is here
+        
+        self.input_image = QtWidgets.QLabel(self.centralwidget)
+        self.input_image.setGeometry(QtCore.QRect(200, 10, 101, 16))
+        self.input_image.setObjectName("input_image")
+        self.output_image = QtWidgets.QLabel(self.centralwidget)
+        self.output_image.setGeometry(QtCore.QRect(190, 340, 101, 16))
+        self.output_image.setObjectName("output_image")
+        
+        self.output_text = QtWidgets.QLabel(self.centralwidget)
+        self.output_text.setGeometry(QtCore.QRect(590, 10, 101, 16))
+        self.output_text.setObjectName("output_text")
+        
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit.setGeometry(QtCore.QRect(450, 30, 331, 531))
         self.plainTextEdit.setObjectName("plainTextEdit")
+        
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(30, 360, 391, 241))
-        self.label_2.setStyleSheet("background-color: rgb(212, 212, 212);\n"
-"border-color: rgb(100, 0, 0);\n"
-"alternate-background-color: rgb(247, 247, 247);")
+        self.label_2.setStyleSheet("background-color: rgb(212, 212, 212);\n""border-color: rgb(100, 0, 0);\n""alternate-background-color: rgb(247, 247, 247);")
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
+        
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setGeometry(QtCore.QRect(660, 570, 121, 31))
         self.pushButton_4.setObjectName("pushButton_4")
+        
         PY_OCR.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(PY_OCR)
         self.statusbar.setObjectName("statusbar")
@@ -66,15 +75,30 @@ class Ui_PY_OCR(object):
         _translate = QtCore.QCoreApplication.translate
         PY_OCR.setWindowTitle(_translate("PY_OCR", "PY_OCR"))
         self.pushButton.setText(_translate("PY_OCR", "EXTRACT"))
-        self.pushButton_2.setText(_translate("PY_OCR", "Browse"))
-        self.label_3.setText(_translate("PY_OCR", "Input Image"))
-        self.label_4.setText(_translate("PY_OCR", "Output Image "))
-        self.label_5.setText(_translate("PY_OCR", "Output Text "))
+        self.browse.setText(_translate("PY_OCR", "Browse"))
+        self.input_image.setText(_translate("PY_OCR", "Input Image"))
+        self.output_image.setText(_translate("PY_OCR", "Output Image "))
+        self.output_text.setText(_translate("PY_OCR", "Output Text "))
         self.pushButton_4.setText(_translate("PY_OCR", "Save to TXT"))
 
+    
+    def browsefiles(self):
+        global fname
+        fname = QFileDialog.getOpenFileName(None, 'Open a File', 'C:', 'Images & PDFs (*.png *.jpg *.jpeg *.pdf)')
+        print(fname)
+        
+    
+    def extract(self):
+        print(fname)
+        maingui.default_settings(fname)
+        
+        
 
 if __name__ == "__main__":
-        import sys
+        import sys,os
+        scriptpath = "ui"
+        sys.path.append(os.path.abspath(scriptpath))
+        import maingui
         app = QtWidgets.QApplication(sys.argv)
         MainWindow = QtWidgets.QMainWindow()
         ui = Ui_PY_OCR()
