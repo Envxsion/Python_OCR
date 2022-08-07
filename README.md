@@ -51,9 +51,9 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 
 ## Lessons Learned
 
-DO NOT build a GUI using python, Django exists
-Using libraries and features without understannding them properly backfires pretty regularly
-Teamwork is important, it kept us going :D
+- DO NOT build a GUI using python, Django exists
+- Using libraries and features without understannding them properly backfires pretty regularly
+- Teamwork is important, it kept us going :D
 
 ### Release History/Bug Fixes
 * 0.2.5
