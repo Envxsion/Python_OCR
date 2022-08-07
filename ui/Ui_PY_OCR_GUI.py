@@ -86,15 +86,12 @@ class Ui_PY_OCR(object):
     def browsefiles(self):
         global fname
         fname = QFileDialog.getOpenFileName(None, 'Open a File', 'C:', 'Images & PDFs (*.png *.jpg *.jpeg *.pdf)')
-        print(fname)
-        
-    def show_images(self):
-        self.output_image.setPixmap(QtGui.QPixmap(maingui.bounding_box_words_only.image_path))
-        
+        #print(fname)
+         
     def extract(self):
-        print(fname)
+        #print(fname)
         maingui.default_settings(fname)
-        show_images(self)
+        self.output_image.setPixmap(QtGui.QPixmap(image_path))
         
 
         

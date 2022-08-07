@@ -83,6 +83,7 @@ def bounding_box_words_only(image_path): #add to cmd
                 cv2.putText(image_path, box[11], (x,y+35), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (19, 104, 240), int(1.5), cv2.LINE_AA) #image, text, xy, font, size, color, thickness, line type
     cv2.imshow('Result', image_path)
     cv2.waitKey(0)
+    return image_path
 #--------------------------------------------------------------------------------------------------------------------------------
 def default_settings(fname):
     image_input_path = str(fname[0])

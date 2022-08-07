@@ -52,9 +52,10 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 ## Lessons Learned
 
 - DO NOT build a GUI using python, Django exists
-- Using libraries and features without understannding them properly backfires pretty regularly
+- Using libraries and features without understanding them properly backfires pretty regularly
 - Teamwork is important, it kept us going :D
 
+In general, we learnt loads about new libaries, inbuilt python standard libaries and dipped our toes into the wacky world of AI, Image Recognition and gained an appreciation for its complexity.
 ### Release History/Bug Fixes
 * 0.2.5
   * Linking the UI to maingui in progress, the buttons work but the displays don't for now. Work in Progess.
