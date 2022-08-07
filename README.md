@@ -9,14 +9,7 @@ An OCR using Python for School Assessed Coursework in Applied Computing
 
 <p align="center"><img src="assets\CLIgif.gif"></p>
 
-
-
-
-## Features
-
-- Will be added later
-
-## Installation
+## Installation/Documentation/Features
 
 <https://0x00sec.gitbook.io/py_ocr-documentation/installation/py_ocr-installaion>
 
