@@ -102,7 +102,7 @@ parser.add_argument('-oem','--oem', type=int, help="Optical character recognitio
 #--------------------------------------------------------------------------------------------------------------------------------
 args = parser.parse_args()
 if args.pdf:
-    pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0_x86/poppler-0.68.0/bin') #screw env variables
+    pages = convert_from_path(args.pdf, 350, poppler_path=r'C:/Program Files/poppler-0.68.0/bin') #screw env variables
     i = 1
     for page in pages: #loop through all pages and magically convert them into jpegs
         image_name = "Page_" + str(i) + ".jpg"  

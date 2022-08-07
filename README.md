@@ -1,10 +1,20 @@
 # Py_OCR
 
+An OCR using Python for School Assessed Coursework in Applied Computing
+
+
 <p align="center"><img src="assets\logo.png"></p>
 
-> Py_OCR is an OCR tool used to scan documents and pdfs and sort through specified data from the scan.
+## Demo
 
----
+assets\CLIgif.gif
+
+
+
+
+## Features
+
+- Will be added later
 
 ## Installation
 
@@ -14,7 +24,7 @@ Py_OCR Only works with python3
 
 ---
 
-## Usage examples
+## Usage/Examples
 
 ```sh
 python main.py --pdf PDF_Examples/testpdf2.pdf --denoise --gray --adapt
@@ -31,6 +41,19 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 ```
 
 ---
+
+---
+
+## Authors
+
+- [@Envxsion](https://github.com/Envxsion)
+- [@Midi.Rc](https://github.com/greube)
+
+## Lessons Learned
+
+DO NOT build a GUI using python, Django exists
+Using libraries and features without understannding them properly backfires pretty regularly
+Teamwork is important, it kept us going :D
 
 ### Release History/Bug Fixes
 * 0.2.5
@@ -64,4 +87,5 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 * 0.0.1
   * Base functionality (Work in progress)
 
-* Created by – Envxsion, Midi.Rc
+
+

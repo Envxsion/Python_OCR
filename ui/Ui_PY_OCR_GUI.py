@@ -41,6 +41,7 @@ class Ui_PY_OCR(object):
         self.input_image = QtWidgets.QLabel(self.centralwidget)
         self.input_image.setGeometry(QtCore.QRect(200, 10, 101, 16))
         self.input_image.setObjectName("input_image")
+        
         self.output_image = QtWidgets.QLabel(self.centralwidget)
         self.output_image.setGeometry(QtCore.QRect(190, 340, 101, 16))
         self.output_image.setObjectName("output_image")
@@ -87,11 +88,15 @@ class Ui_PY_OCR(object):
         fname = QFileDialog.getOpenFileName(None, 'Open a File', 'C:', 'Images & PDFs (*.png *.jpg *.jpeg *.pdf)')
         print(fname)
         
-    
+    def show_images(self):
+        self.output_image.setPixmap(QtGui.QPixmap(maingui.bounding_box_words_only.image_path))
+        
     def extract(self):
         print(fname)
         maingui.default_settings(fname)
+        show_images(self)
         
+
         
 
 if __name__ == "__main__":
