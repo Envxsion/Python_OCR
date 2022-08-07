@@ -7,7 +7,7 @@ An OCR using Python for School Assessed Coursework in Applied Computing
 
 ## Demo
 
-assets\CLIgif.gif
+<p align="center"><img src="assets\CLIgif.gif"></p>
 
 
 
