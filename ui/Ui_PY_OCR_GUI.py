@@ -91,7 +91,8 @@ class Ui_PY_OCR(object):
     def extract(self):
         #print(fname)
         maingui.default_settings(fname)
-        self.output_image.setPixmap(QtGui.QPixmap(image_path))
+        print(maingui.image_path)
+        self.output_image.setPixmap(QtGui.QPixmap(maingui.image_path))
         
 
         
