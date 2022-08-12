@@ -4,7 +4,6 @@ import numpy as np
 import pytesseract
 import argparse
 from pdf2image import convert_from_path
-import the_better_ui
 image_path = ""
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
@@ -90,7 +89,7 @@ def bounding_box_words_only(local_image_path): #bouding boxes around detected wo
     
 #--------------------------------------------------------------------------------------------------------------------------------
 def default_settings(fname): #default settings for OCR
-    image_input_path = str(fname[0])
+    image_input_path = fname
     gray = False
     adapt = False
     denoise = False

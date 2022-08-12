@@ -6,4 +6,5 @@ pytesseract
 opencv-python
 argparse
 pdf2image
+PIL
 #easyocr

@@ -50,6 +50,10 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 
 In general, we learnt loads about new libaries, inbuilt python standard libaries and dipped our toes into the wacky world of AI, Image Recognition and gained an appreciation for its complexity.
 ### Release History/Bug Fixes
+* 0.3.1
+  * I/O placeholders are working in GUI, Input placeholder also gets resized and updated. PDF's have not been tested.
+* 0.3.0
+  * Switched from PyQt to Tkinter, eaisier to implement, GUI is ready to be hooked up to backend
 * 0.2.5
   * Linking the UI to maingui in progress, the buttons work but the displays don't for now. Work in Progess.
 * 0.2.1
