@@ -4,6 +4,8 @@ import numpy as np
 import pytesseract
 import argparse
 from pdf2image import convert_from_path
+import the_better_ui
+
 image_path = ""
 
 pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #don't want to mess around with PATH
@@ -56,9 +58,13 @@ def postprocessing(post, psm, oem): #postprocessing for OCR
     conf = fr'--oem {oem} --psm {psm}'  #Legacy + LSTM engines with Automatic page segmentation with OSD.
     #start with psm 3 as a baseline
     #psm 13 is last resort where is randomly starts detecting everything
-    result = pytesseract.image_to_string(post, lang='eng') #convert image to string
+    global result
+    result = pytesseract.image_to_string(post, lang='eng') #convert image to string\
     #, config="-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.:, " 
     print("\n" "RESULT ---------------------------------------------------------- \n"+ result + "\n-----------------------------------------------------------------") #beautify this later with GUI
+
+def get_result():
+    return result
 #--------------------------------------------------------------------------------------------------------------------------------
 #def bounding_box_characters_only(image): #add to cmd
 #    hImg,wImg,_ = image.shape
@@ -106,9 +112,11 @@ def filecheck(image_input_path,gray, adapt, denoise, box, oem, psm):  #check if 
             image_name = "Page_" + str(i) + ".jpg"  
             page.save(f"frompdf/{image_name}", "JPEG") #save image to folder
             image_path = cv2.imread(f"frompdf/{image_name}")  #read image
-            run(image_path,gray, adapt, denoise, box, oem, psm)
+            run(image_path,gray, adapt, denoise, box, oem, psm) #run OCR on image
             i = i+1
     else:
         image_path = cv2.imread(image_input_path)
         run(image_path,gray, adapt, denoise, box, oem, psm)
 #--------------------------------------------------------------------------------------------------------------------------------
+
+

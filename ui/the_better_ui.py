@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog#For file explorer
-from tkinter import scrolledtext#For scroll bar text box
+from tkinter import scrolledtext
+import tkinter#For scroll bar text box
 from PIL import ImageTk, Image
 import maingui
 import re
@@ -19,27 +20,35 @@ def browse():
     regex = re.findall(r'.*?\'(.*)\'.*', file[1]) #regex to find everything in quotes
     regex = re.sub(r"[\[\]]",'', regex[0]) #regex to remove sqaure brackets
     file = str(regex)
-    
-    imgI = ImageTk.PhotoImage(Image.open(str(file))) #open image
-    imgI = imgI._PhotoImage__photo.subsample(2) #resize it to make it 2x smaller
-    input_placeholder.configure(image=imgI) #configure the image to the input placeholder
+    if file.endswith(".pdf"):
+        #couldn't get this part to work due to circular imports
+        pass
+            
+    else:
+        imgI = ImageTk.PhotoImage(Image.open(str(file))) #open image
+        imgI = imgI._PhotoImage__photo.subsample(2) #resize it to make it 2x smaller
+        input_placeholder.configure(image=imgI) #configure the image to the input placeholder
     print(str(file))
     
     
 def extract():
+    
     print(str(file))
     fname = file
     maingui.default_settings(fname) #use imported backend
+    txtsave = maingui.get_result()
+    print(txtsave)
+    Output_text_txt.insert(tkinter.INSERT, txtsave )
     
 def savetxt():
-    file = filedialog.asksaveasfile(filetypes = (("Text files","*.txt"),("All Files","*.*")))
+    file = filedialog.asksaveasfile(filetypes = (("Text files","*.txt"),("All Files","*.*")),initialfile = 'ocr_save.txt',initialdir='ui')
     
-input_img = Label(window, text="Input Image", bg= "#ffffe3")
-output_img = Label(window, text="Output Image", bg= "#ffffe3")
-output_text = Label(window, text="Output Text", bg= "#ffffe3")
+input_img = Label(window, text="Input Image (Note: pdf's will not be shown here)", bg= "#ffffe3")
+output_img = Label(window, text="Output Image will open in a new window... ", bg= "#ffffe3")
+output_text = Label(window, text="Output Text [The text in the window below can be edited]", bg= "#ffffe3")
 input_img.place(x= 250 , y= 5)
 output_img.place(x= 250, y=600)
-output_text.place(x= 1200, y=5)
+output_text.place(x= 1100, y=5)
 
 imgI = ImageTk.PhotoImage(Image.open("ui/assets/placeholder.jpg"))
 imgO = ImageTk.PhotoImage(Image.open("ui/assets/placeholder2.jpg"))
@@ -49,6 +58,7 @@ input_placeholder.pack(side="bottom", fill="both", expand="yes")
 input_placeholder.place(x=250 , y=50)
 
 output_placeholder = Label(window, image=imgO, bg= "#ffffe3")
+output_placeholder.pack(side="bottom", fill="both", expand="yes")
 output_placeholder.place(x=250 , y=650)
 
 Extract = Button(window, text="EXTRACT", bg= "Red", font=("Times",15), width= 12,command = extract )

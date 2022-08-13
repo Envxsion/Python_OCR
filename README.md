@@ -45,12 +45,14 @@ python main.py --pdf "images\PDF_Examples\Gordon House [M3202]-Service-07-06-202
 ## Lessons Learned
 
 - DO NOT build a GUI with only python, Django exists
-- Using libraries and features without understanding them properly backfires pretty regularly
 - Teamwork is important, it kept us going :D
 - Please for the love of god document the important bits and seperate everything into files
+- Watch out for circular imports :(
 
 In general, we learnt loads about new libaries, inbuilt python standard libaries and dipped our toes into the wacky world of AI, Image Recognition and gained an appreciation for its complexity.
 ### Release History/Bug Fixes
+* 1.0.0 - Yes!!! First release!!
+  * Output image opens up in a new window, but all the other UI features work! Release #1!!
 * 0.3.1
   * I/O placeholders are working in GUI, Input placeholder also gets resized and updated. PDF's have not been tested.
 * 0.3.0
