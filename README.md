@@ -23,6 +23,10 @@ Py_OCR Only works with python3
 python main.py --pdf PDF_Examples/testpdf2.pdf --denoise --gray --adapt
 ```
 
+#### GUI Version
+```sh
+python ui/maingui.py
+```
 ---
 
 ---
